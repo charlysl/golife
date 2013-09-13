@@ -5,13 +5,13 @@
 // c = number of columns
 // s = array of coords of starting live cells
 var Game = function(r, c, s) {
-	var DEFAULT_ROWS = 10,
-			DEFAULT_COLS = 10;
+	var DEFAULT_ROWS = 10;
+	var DEFAULT_COLS = 10;
 
 	// validate and set start conditions
-	var rows = (r && typeof r === 'number') ? r : DEFAULT_ROWS,
-			cols = (c && typeof c === 'number') ? c : DEFAULT_COLS,
-			live_cells = [];
+	var rows = (r && typeof r === 'number') ? r : DEFAULT_ROWS;
+	var cols = (c && typeof c === 'number') ? c : DEFAULT_COLS;
+	var live_cells = [];
 
 	if (s && s instanceof Array) {
 		for (var i = 0; i < s.length; i++) {
@@ -29,10 +29,10 @@ var Game = function(r, c, s) {
 	return {
 		// returns current grid
 		grid: function() {
-			var arr = [],
-					std_col = [],
-					i = cols,
-					j = rows;
+			var arr = [];
+			var std_col = [];
+			var i = cols;
+			var j = rows;
 
 			// populate grid with zeros
 			while (j--) {
@@ -44,8 +44,8 @@ var Game = function(r, c, s) {
 
 			// populate live cells
 			for (var n = 0; n < live_cells.length; n++) {
-				var x = live_cells[n][0],
-						y = live_cells[n][1];
+				var x = live_cells[n][0];
+				var y = live_cells[n][1];
 				arr[x][y] = 1;
 			}
 
