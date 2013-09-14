@@ -21,14 +21,7 @@ var Util = function() {
 					subprocess(from1, to1, from2 + 1, to2, f);
 				}
 			};
-			if (from1 > to1) return;
-			f([from1, from2]);
-			if (from2 === to2) {
-				subprocess(from1 + 1, to1, from2, to2, f);
-			}
-			else {
-				subprocess(from1, to1, from2 + 1, to2, f);
-			}
+			subprocess(from1, to1, from2, to2, f);
 		},
 
 		// element iterator (by Daniel Jackson)
