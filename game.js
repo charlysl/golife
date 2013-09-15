@@ -16,21 +16,21 @@ var Game = function(r, c, s) {
 	var cols = (c && typeof c === 'number') ? c : DEFAULT_COLS;
 	var live_cells = [];
 
-	//TODO: rewrite this whole thing
+	// populate starting live cells
 	if (s && s instanceof Array) {
-		for (var i = 0; i < s.length; i++) {
-			if (s[i] instanceof Array && s[i].length === 2 && typeof s[0] === 'number' && typeof s[1] === 'number') {
-				//TODO: validate that s[i] falls within grid
-				live_cells.push(s[i]);
+		util.each(s, function(cell) {
+			if (cell instanceof Array && cell.length === 2 && typeof cell[0] === 'number' && typeof cell[1] === 'number') { // validate cell format
+				if (cell[0] >= 0 && cell[0] < cols && cell[1] >= 0 && cell[1] < rows) live_cells.push(cell); // validate that cell falls within grid
 			}
-		}
+		});
 	}
 
+	// TODO: add more variations
 	if (live_cells.length === 0) {
 		live_cells = [[0,0], [Math.floor(cols/2), Math.floor(rows/2)]]; // defaults to most central cell
 	}
 
-	return {
+	var self = {
 		// returns current board
 		board: function() {
 			var grid = [];
@@ -45,8 +45,8 @@ var Game = function(r, c, s) {
 			});
 
 			// populate live cells
-			utils.each(live_cells, function(cell) {
-				grid[cell[0]][cell[1]] = 1;
+			utils.each(live_cells, function(c) {
+				grid[c[0]][c[1]] = 1;
 			});
 
 			return grid;
@@ -54,21 +54,64 @@ var Game = function(r, c, s) {
 
 		// return cell state at (x, y)
 		cell: function(x, y) {
-			return this.board()[x][y];
+			return self.board()[x][y];
+		},
+
+		// return coords of live cells
+		live_cells: function() {
+			return live_cells;
 		},
 
 		// return coords of (x, y)'s neighbors
 		neighbors: function(x, y) {
 			var neighborhood = [];
-			utils.from_to_2d(Math.max(0, x - 1), Math.min(x + 1, cols), Math.max(0, y - 1), Math.min(y + 1, rows), function(cell) {
-				if (cell[0] !== x || cell[1] !== y) neighborhood.push(cell); // exclude self
+			utils.from_to_2d(Math.max(0, x - 1), Math.min(x + 1, cols - 1), Math.max(0, y - 1), Math.min(y + 1, rows - 1), function(c) {
+				if (c[0] !== x || c[1] !== y) neighborhood.push(c); // exclude self
 			});
 			return neighborhood;
 		},
 
-		// state transition
+		// return count of live neighbors
+		live_neighbors: function(x, y) {
+			var count = 0;
+			utils.each(self.neighbors(x, y), function(n) {
+				if (self.cell(n[0], n[1]) === 1) count += 1;
+			});
+			return count;
+		},
+
+		// state transition; returns board
 		step: function() {
-			//TODO: iterate!
+			var for_removal = [];
+			var for_addition = [];
+
+			utils.each(live_cells, function(c) {
+				var live_neighbor_count = self.live_neighbors(c[0], c[1]);
+
+				// dead cells with exactly 3 live neighbors revive
+				utils.each(self.neighbors(c[0], c[1]), function(n) {
+					if (self.cell(n[0], n[1]) === 0) { // dead neighbor
+						if (self.live_neighbors(n[0], n[1]) === 3) {
+							if (!utils.contains(for_addition, [n[0], n[1]])) for_addition.push([n[0], n[1]]); // do not duplicate
+						}
+					}
+				});
+
+				// only live cells with 2 or 3 live neighbors survive
+				if (live_neighbor_count !== 2 && live_neighbor_count !== 3) for_removal.push([c[0], c[1]]);
+			});
+
+			// apply rules simultaneously
+			utils.each(for_addition, function(cell) {
+				live_cells.push(cell);
+			});
+			utils.each(for_removal, function(cell) {
+				utils.remove(live_cells, cell);
+			});
+
+			return self.board();
 		}
 	};
+
+	return self;
 };
