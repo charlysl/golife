@@ -67,7 +67,12 @@ var Game = function(r, c, s) {
 
 		// return cell state at (x, y)
 		cell: function(x, y) {
-			return self.board()[x][y];
+			if (x >= 0 && x < self.cols() && y >= 0 && y < self.rows()) {
+				return self.board()[x][y];
+			}
+			else {
+				return -1; // if coords fall outside grid
+			}
 		},
 
 		// return coords of live cells
@@ -78,9 +83,11 @@ var Game = function(r, c, s) {
 		// return coords of (x, y)'s neighbors
 		neighbors: function(x, y) {
 			var neighborhood = [];
-			utils.from_to_2d(Math.max(0, x - 1), Math.min(x + 1, cols - 1), Math.max(0, y - 1), Math.min(y + 1, rows - 1), function(c) {
-				if (c[0] !== x || c[1] !== y) neighborhood.push(c); // exclude self
-			});
+			if (x >= 0 && x < self.cols() && y >= 0 && y < self.rows()) {
+				utils.from_to_2d(Math.max(0, x - 1), Math.min(x + 1, cols - 1), Math.max(0, y - 1), Math.min(y + 1, rows - 1), function(c) {
+					if (c[0] !== x || c[1] !== y) neighborhood.push(c); // exclude self
+				});
+			}
 			return neighborhood;
 		},
 
