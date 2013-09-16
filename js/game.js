@@ -18,7 +18,7 @@ var Game = function(r, c, s) {
 
 	// populate starting live cells
 	if (s && s instanceof Array) {
-		util.each(s, function(cell) {
+		utils.each(s, function(cell) {
 			if (cell instanceof Array && cell.length === 2 && typeof cell[0] === 'number' && typeof cell[1] === 'number') { // validate cell format
 				if (cell[0] >= 0 && cell[0] < cols && cell[1] >= 0 && cell[1] < rows) live_cells.push(cell); // validate that cell falls within grid
 			}
@@ -50,6 +50,16 @@ var Game = function(r, c, s) {
 			});
 
 			return grid;
+		},
+
+		// return number of rows
+		rows: function() {
+			return rows;
+		},
+
+		// return number of cols
+		cols: function() {
+			return cols;
 		},
 
 		// return cell state at (x, y)
