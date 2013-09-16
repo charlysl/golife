@@ -6,16 +6,6 @@
 	// detect hash
 	var hash = document.URL.split('#')[1];
 
-	// generate a random seed
-	var random_seed = function(r, c) {
-		var arr = [];
-		utils.from_to(0, 49, function() {
-			var cell = [Math.floor(Math.random() * c), Math.floor(Math.random() * r)];
-			if (!utils.contains(arr, cell)) arr.push(cell);
-		});
-		return arr;
-	};
-
 	// preset arrangements
 	var presets = {
 		glider: {
@@ -23,7 +13,7 @@
 			cols: 10,
 			start: [[2, 1], [3, 2], [1, 3], [2, 3], [3, 3]]
 		},
-		methuselah: {
+		acorn: {
 			rows: 20,
 			cols: 20,
 			start: [[8, 9], [7, 11], [8, 11], [10, 10], [11, 11], [12, 11], [13, 11]]
@@ -36,7 +26,7 @@
 		random: {
 			rows: 25,
 			cols: 25,
-			start: random_seed(25, 25)
+			start: [] // will populate cells randomly
 		}
 	};
 

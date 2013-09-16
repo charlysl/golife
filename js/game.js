@@ -12,8 +12,8 @@ var Game = function(r, c, s) {
 	var utils = Util();
 
 	// validate and set start conditions
-	var rows = (r && typeof r === 'number') ? r : DEFAULT_ROWS;
-	var cols = (c && typeof c === 'number') ? c : DEFAULT_COLS;
+	var rows = (r && typeof r === 'number' && r > 0) ? r : DEFAULT_ROWS;
+	var cols = (c && typeof c === 'number' && c > 0) ? c : DEFAULT_COLS;
 	var live_cells = [];
 
 	// populate starting live cells
@@ -25,9 +25,12 @@ var Game = function(r, c, s) {
 		});
 	}
 
-	// TODO: add more variations
+	// if none specified
 	if (live_cells.length === 0) {
-		live_cells = [[0,0], [Math.floor(cols/2), Math.floor(rows/2)]]; // defaults to most central cell
+		utils.from_to(0, Math.floor((rows + cols)/2)*2, function() {
+			var cell = [Math.floor(Math.random() * cols), Math.floor(Math.random() * rows)];
+			if (!utils.contains(live_cells, cell)) live_cells.push(cell);
+		});
 	}
 
 	var self = {
