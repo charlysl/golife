@@ -45,7 +45,7 @@
 		game = Game(presets[hash].rows, presets[hash].cols, presets[hash].start);
 	}
 	else {
-		hash = glider;
+		hash = 'glider';
 		game = Game(10, 10, [[2, 1], [3, 2], [1, 3], [2, 3], [3, 3]]); // defaults to glider
 	}
 
