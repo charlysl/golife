@@ -1,7 +1,20 @@
-// a demonstration program using the graphics library
+// main method
 (function() {
+	// import utility functions
+	var utils = Util();
+
 	// detect hash
 	var hash = document.URL.split('#')[1];
+
+	// generate a random seed
+	var random_seed = function(r, c) {
+		var arr = [];
+		utils.from_to(0, 49, function() {
+			var cell = [Math.floor(Math.random() * c), Math.floor(Math.random() * r)];
+			if (!utils.contains(arr, cell)) arr.push(cell);
+		});
+		return arr;
+	};
 
 	// preset arrangements
 	var presets = {
@@ -14,17 +27,25 @@
 			rows: 20,
 			cols: 20,
 			start: [[8, 9], [7, 11], [8, 11], [10, 10], [11, 11], [12, 11], [13, 11]]
+		},
+		lwss: {
+			rows: 20,
+			cols: 20,
+			start: [[15, 8], [15, 9], [15, 10], [16, 7], [16, 10], [17, 10], [18, 10], [19, 7], [19, 9]]
+		},
+		random: {
+			rows: 25,
+			cols: 25,
+			start: random_seed(25, 25)
 		}
 	};
-
-	// import utility functions
-	var utils = Util();
 
 	// initialize game object
 	if (hash && hash in presets) {
 		game = Game(presets[hash].rows, presets[hash].cols, presets[hash].start);
 	}
 	else {
+		hash = glider;
 		game = Game(10, 10, [[2, 1], [3, 2], [1, 3], [2, 3], [3, 3]]); // defaults to glider
 	}
 
@@ -46,7 +67,7 @@
 	var LIM_DIM = Math.min(MIN_WIDTH, MIN_HEIGHT);
 
 	// draw exterior box
-	pad.draw_rectangle(Coord(0, 0), LIM_DIM * COLS, LIM_DIM * ROWS, LINE_WIDTH * 2, gray);
+	pad.draw_rectangle(Coord(0, 0), LIM_DIM * COLS, LIM_DIM * ROWS, LINE_WIDTH, gray);
 
 	// draw interior boxes
 	utils.from_to_2d(0, COLS - 1, 0, ROWS - 1, function(box) {
@@ -77,6 +98,22 @@
 
 		// step and fill new cells
 		game.step();
+		utils.each(game.live_cells(), function(cell) {
+			fill_cell(cell[0], cell[1]);
+		});
+	};
+
+	// reset
+	document.getElementById("reset").onclick = function() {
+		// clear all cells
+		utils.each(game.live_cells(), function(cell) {
+			clear_cell(cell[0], cell[1]);
+		});
+
+		// re-initialize game object
+		game = Game(presets[hash].rows, presets[hash].cols, presets[hash].start);
+
+		// repopulate starting cells
 		utils.each(game.live_cells(), function(cell) {
 			fill_cell(cell[0], cell[1]);
 		});
