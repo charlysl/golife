@@ -23,14 +23,14 @@ var Game = function(r, c, s) {
 				if (cell[0] >= 0 && cell[0] < cols && cell[1] >= 0 && cell[1] < rows) live_cells.push(cell); // validate that cell falls within grid
 			}
 		});
-	}
 
-	// if none specified
-	if (live_cells.length === 0) {
-		utils.from_to(0, Math.floor((rows + cols)/2)*2, function() {
-			var cell = [Math.floor(Math.random() * cols), Math.floor(Math.random() * rows)];
-			if (!utils.contains(live_cells, cell)) live_cells.push(cell);
-		});
+		// randomize board
+		if (s[0] === 'random') {
+			utils.from_to(0, Math.floor((rows + cols)/2)*2, function() {
+				var cell = [Math.floor(Math.random() * cols), Math.floor(Math.random() * rows)];
+				if (!utils.contains(live_cells, cell)) live_cells.push(cell);
+			});
+		}
 	}
 
 	var self = {
