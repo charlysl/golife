@@ -38,7 +38,7 @@ var Util = function() {
 				self.from_to(0, a1.length - 1, function(i) {
 					// nested arrays
 					if (a1[i] instanceof Array && a2[i] instanceof Array && a1[i].length === a2[i].length) {
-						result = self.equals(a1[i], a2[i]);
+						if (result) result = self.equals(a1[i], a2[i]);
 					}
 					// other types
 					else if (a1[i] !== a2[i]) {
