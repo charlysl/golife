@@ -5,15 +5,22 @@
 	<script src="js/graphics.js"></script>
 	<script src="js/util.js"></script>
 	<script src="js/game.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
 	<link href="css/app.css" rel="stylesheet" />
 	<link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
 </head>
 
 <body>
 	<div class="wrapper">
-		<canvas id="canvas" class="board" height="400" width="400"></canvas>
+		<div class="board"></div>
+		<div class="editdialog">
+			<p>Choose your dimensions</p>
+			<input id="rows" type="text" value="20" maxlength="2"></input>
+			<span>x</span>
+			<input id="cols" type="text" value="20" maxlength="2"></input>
+		</div>
 		<div class="sidebar">
-			<h4>6.170 Project 1.1</h4>
+			<h4>6.170 Project 1.2</h4>
 			<h1>Conway's Game of Life</h1>
 			<blockquote>
 				<p>The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.</p>
@@ -26,8 +33,9 @@
 				<li>Any live cell with 3+ live neighbours dies.</li>
 				<li>Any dead cell with exactly 3 live neighbours becomes a live cell.</li>
 			</ol>
-			<div id="next" class="button">Next Step</div>
-			<div id="reset" class="button">Reset Game</div>
+			<div id="control" class="button">Play &emsp; &#9658;</div>
+			<div id="reset" class="button">Reset</div>
+			<div id="board" class="button">Board</div>
 		</div>
 	</div>
 	<!-- <script src="js/test.js"></script> -->
