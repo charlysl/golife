@@ -109,8 +109,8 @@
 		game = Game(presets[hash].rows, presets[hash].cols, presets[hash].start);
 	}
 	else {
-		hash = 'custom';
-		game = Game(10, 10, [[2, 1], [3, 2], [1, 3], [2, 3], [3, 3]]); // defaults to glider
+		hash = 'random';
+		game = Game(25, 25, ['random']); // defaults to random
 	}
 
 	// draw board
@@ -171,6 +171,12 @@
 
 			// show edit dialogue
 			$('.editdialog').fadeIn(650);
+
+			// background animation
+			if (!is_playing) {
+				is_playing = true;
+				iterate();
+			}
 		}
 		else if (edit_state === 1) {
 			// state 2: paint board
@@ -239,6 +245,7 @@
 		else {
 			// state 0: normal gameplay
 			edit_state = 0;
+			is_playing = false;
 
 			// redraw board
 			game = Game(parseInt($('#rows').val(), 10), parseInt($('#cols').val(), 10), painted_cells);

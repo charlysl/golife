@@ -26,7 +26,7 @@ var Game = function(r, c, s) {
 
 		// randomize board
 		if (s[0] === 'random') {
-			utils.from_to(0, Math.floor((rows + cols)/2)*2, function() {
+			utils.from_to(0, Math.floor((rows + cols)/2)*4, function() {
 				var cell = [Math.floor(Math.random() * cols), Math.floor(Math.random() * rows)];
 				if (!utils.contains(live_cells, cell)) live_cells.push(cell);
 			});
