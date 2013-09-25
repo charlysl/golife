@@ -38,17 +38,23 @@
 		}
 	};
 
-	// fill cell
+	// graphically fills in the cell at a particular coordinate
+	// x: x-coordinate of the cell to be filled (number)
+	// y: y-coordinate of the cell to be filled (number)
 	var fill_cell = function(x, y) {
 		$('.col-' + x + '.row-' + y).addClass('live');
 	};
 
-	// clear cell
+	// graphically clears the cell at a particular coordinate
+	// x: x-coordinate of the cell to be cleared (number)
+	// y: y-coordinate of the cell to be cleared (number)
 	var clear_cell = function(x, y) {
 		$('.col-' + x + '.row-' + y).removeClass('live');
 	};
 
-	// draw board given a game object
+	// draw the board for the game
+	// g: the corresponding Game object
+	// assumes positive integral rows/cols and valid seed
 	var draw_board = function(g) {
 		// calculate limiting dimension
 		var ROWS = g.rows();
@@ -74,6 +80,8 @@
 	};
 
 	// fill/clear cells in a board of the correct size
+	// g: the corresponding Game object
+	// assumes that board does not have to be resized
 	var fill_board = function(g) {
 		$('.cell').removeClass('live');
 
@@ -83,6 +91,8 @@
 	};
 
 	// increment game and redraw board
+	// implemented as a recursive loop using setTimeout
+	// stops when stable (consecutive identical states, does not include oscillators) or when paused
 	var iterate = function() {
 		// clear all cells
 		utils.each(game.live_cells(), function(cell) {

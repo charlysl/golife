@@ -1,9 +1,9 @@
 // game logic for Conway's Game of Life
 
 // initializes game board with specified conditions:
-// r = number of rows
-// c = number of columns
-// s = array of coords of starting live cells
+// r: rows on board (number)
+// c: columns on board (number)
+// s: array of coords of starting live cells (nested array)
 var Game = function(r, c, s) {
 	var DEFAULT_ROWS = 10;
 	var DEFAULT_COLS = 10;
@@ -12,6 +12,7 @@ var Game = function(r, c, s) {
 	var utils = Util();
 
 	// validate and set start conditions
+	// defaults to 10 x 10 empty grid
 	var rows = (r && typeof r === 'number' && r > 0) ? r : DEFAULT_ROWS;
 	var cols = (c && typeof c === 'number' && c > 0) ? c : DEFAULT_COLS;
 	var live_cells = [];
@@ -34,7 +35,9 @@ var Game = function(r, c, s) {
 	}
 
 	var self = {
-		// returns current board
+		// returns current board as a two-dimensional array
+		// 1's represent live cells, 0's represent dead cells
+		// e.g. the 2x2 identity matrix returns [[1, 0], [0, 1]]
 		board: function() {
 			var grid = [];
 			var zero_col = [];
@@ -55,17 +58,18 @@ var Game = function(r, c, s) {
 			return grid;
 		},
 
-		// return number of rows
+		// returns number of rows as a number
 		rows: function() {
 			return rows;
 		},
 
-		// return number of cols
+		// returns number of cols as a number
 		cols: function() {
 			return cols;
 		},
 
-		// return cell state at (x, y)
+		// returns cell state at (x, y)
+		// 1 if live, 0 if dead, -1 if invalid
 		cell: function(x, y) {
 			if (x >= 0 && x < self.cols() && y >= 0 && y < self.rows()) {
 				return self.board()[x][y];
@@ -75,12 +79,12 @@ var Game = function(r, c, s) {
 			}
 		},
 
-		// return coords of live cells
+		// returns coords of currently live cells
 		live_cells: function() {
 			return live_cells;
 		},
 
-		// return coords of (x, y)'s neighbors
+		// returns coords of (x, y)'s neighbors, bounded by board dimensions
 		neighbors: function(x, y) {
 			var neighborhood = [];
 			if (x >= 0 && x < self.cols() && y >= 0 && y < self.rows()) {
@@ -91,7 +95,7 @@ var Game = function(r, c, s) {
 			return neighborhood;
 		},
 
-		// return count of live neighbors
+		// returns count of live neighbors
 		live_neighbors: function(x, y) {
 			var count = 0;
 			utils.each(self.neighbors(x, y), function(n) {
@@ -100,7 +104,8 @@ var Game = function(r, c, s) {
 			return count;
 		},
 
-		// state transition; returns board
+		// increments the board by one tick
+		// returns board as an array
 		step: function() {
 			var for_removal = [];
 			var for_addition = [];
@@ -132,6 +137,8 @@ var Game = function(r, c, s) {
 			return self.board();
 		}
 	};
+
+	Object.freeze(self);
 
 	return self;
 };
